@@ -5,7 +5,7 @@ This is a zombie system, converted from ESX
 * Hordes
 * Zombie attack proximity
 * Safe Zones
-* Loot Objects
+
 
 ## How install
 1. Download the github repository
