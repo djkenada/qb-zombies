@@ -1,7 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
--- TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
-
 players = {}
 
 RegisterServerEvent("qb-zombies:newplayer")
@@ -29,14 +27,26 @@ AddEventHandler('qb-zombies:moneyloot', function()
 end)
 
 RegisterServerEvent('qb-zombies:itemloot')
-AddEventHandler('qb-zombies:itemloot', function(item)
-    local Player = QBCore.Functions.GetPlayer(source)
-	local random = math.random(1,3)
-    Player.Functions.AddItem(item, random)
-    TriggerClientEvent("QBCore:Notify", source, 'You found' .. random .. ' ' .. item .. '(s)','success')
-	--TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items[random], "add")
+AddEventHandler('qb-zombies:itemloot', function(listKey)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local item = math.random(1, #Config.Items)
+    for k,v in pairs(Config.Items) do
+        if item == k then
+            Player.Functions.AddItem(v, Config.ItemAmount)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v], 'add')
+        end
+    end
+	
+    if Config.AddtionalItem then
+        local Luck = math.random(1, 8)
+        local Odd = math.random(1, 8)
+        if Luck == Odd then
+            Player.Functions.AddItem(Config.AddItem, Config.AddItemAmount)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[Config.AddItem], 'add')
+        end
+    end
 end)
-
 
 entitys = {}
 
