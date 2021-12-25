@@ -1,10 +1,11 @@
-This is a zombie system, converted from ESX
+This is a zombie system, converted from ESX for use with QBCore.
 * Loot from zombies (Weapons, items and money)
 * Loot probability
 * Follow the closest player
 * Hordes
 * Zombie attack proximity
 * Safe Zones
+* Works with QBCore Inventory!
 
 
 ## How install
