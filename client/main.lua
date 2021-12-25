@@ -127,7 +127,7 @@ AddEventHandler("ZombieSync", function()
 			end
 
 			table.insert(entitys, entity)
-			--Citizen.Trace("Zombie Spawned\n")
+			
 		end	
 
 		for i, entity in pairs(entitys) do
@@ -142,7 +142,6 @@ AddEventHandler("ZombieSync", function()
 					local model = GetEntityModel(entity)
 					SetEntityAsNoLongerNeeded(entity)
 					SetModelAsNoLongerNeeded(model)
-					--Citizen.Trace("Zombie Eliminated\n")
 					table.remove(entitys, i)
 
 				end
@@ -154,7 +153,6 @@ AddEventHandler("ZombieSync", function()
 				SetModelAsNoLongerNeeded(model)
 				DeleteEntity(entity)
 				table.remove(entitys,i)
-				--Citizen.Trace("Zombie Eliminated from Water\n")
 			end
 		end
 	end
@@ -277,11 +275,10 @@ if Config.ZombieDropLoot then
 										TaskPlayAnim(PlayerPedId(), "random@domestic", "pickup_low", 8.0, -8, 2000, 2, 0, 0, 0, 0)
 										Citizen.Wait(2000)
 										randomChance = math.random(1, 100)
-										randomItem = Config.ItemLoot[math.random(1, #Config.ItemLoot)]
 										if randomChance < Config.ProbabilityMoneyLoot then
 											TriggerServerEvent('qb-zombies:moneyloot')
 										elseif randomChance >= Config.ProbabilityMoneyLoot and randomChance < Config.ProbabilityItemLoot then
-											TriggerServerEvent('qb-zombies:itemloot', randomItem)
+											TriggerServerEvent('qb-zombies:itemloot')
 										elseif randomChance >= Config.ProbabilityItemLoot and randomChance < 100 then
 											QBCore.Functions.Notify('You found nothing','error')
 										end
@@ -312,7 +309,6 @@ if Config.SafeZone then
 				for i, entity in pairs(entitys) do
 					pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, true))
 					if(Vdist(pedX, pedY, pedZ, v.x, v.y, v.z) < v.radio)then
-						--Citizen.Trace("Zombie Eliminated from refuge\n")
 						SetEntityHealth(entity, 0)
 						SetEntityAsNoLongerNeeded(entity)
 						DeleteEntity(entity)
@@ -359,7 +355,6 @@ AddEventHandler('qb-zombies:clear', function()
 		SetEntityAsNoLongerNeeded(entity)
 		SetModelAsNoLongerNeeded(model)
 		table.remove(entitys, i)
-		--Citizen.Trace("Zombie Eliminated\n")
 	end
 end)
 
