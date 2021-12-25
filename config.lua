@@ -22,10 +22,13 @@ Config.DespawnDistance = 90 --115
 Config.ZombieDropLoot = true
 Config.RandomChance = math.random(1, 100)
 Config.ItemAmount = math.random(3,5)
+Config.AddtionalItem = false
+Config.AddItem = 'metalscrap'
+Config.AddItemAmount = math.random(1,3)
 
 Config.ProbabilityMoneyLoot = 33 -- 3-33 = 30%
 Config.ProbabilityItemLoot = 53 -- 53-43-3 = 7%
-Config.ItemLoot = {
+Config.Items = {
 	[1] = "pistol_ammo",
 	[2] = "rifle_ammo",
 	[3] = "smg_ammo",
@@ -47,4 +50,3 @@ Config.ItemLoot = {
 	[19] = "bandage",
 	[20] = "painkillers",
 }
-
