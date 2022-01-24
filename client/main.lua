@@ -121,6 +121,7 @@ AddEventHandler("ZombieSync", function()
 			SetPedCombatMovement(entity, 46)
 			TaskCombatPed(entity, GetPlayerPed(-1), 0,16)
 			TaskLeaveVehicle(entity, vehicle, 0)
+			SetBlockingOfNonTemporaryEvents(entity, true) -- Stops them breaking anims and acting fruity when a gun is aimed at them
 
 			if not NetworkGetEntityIsNetworked(entity) then
 				NetworkRegisterEntityAsNetworked(entity)
