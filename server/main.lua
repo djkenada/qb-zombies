@@ -30,13 +30,13 @@ RegisterServerEvent('qb-zombies:itemloot')
 AddEventHandler('qb-zombies:itemloot', function(listKey)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local random = math.random(1,5) 
+	local ItemAmount = Config.ItemAmount
     local item = math.random(1, #Config.Items)
     for k,v in pairs(Config.Items) do
         if item == k then
-		Player.Functions.AddItem(v, Config.ItemAmount)
-		TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v], 'add')
-		TriggerClientEvent("QBCore:Notify", source, 'You found ' .. random .. ' ' .. v .. '(s)','success')
+            Player.Functions.AddItem(v, ItemAmount)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v], 'add')
+			TriggerClientEvent("QBCore:Notify", src, 'You found '..ItemAmount..'x '..QBCore.Shared.Items[v].label..' ','success')
         end
     end
 	
@@ -49,6 +49,23 @@ AddEventHandler('qb-zombies:itemloot', function(listKey)
         end
     end
 end)
+
+RegisterServerEvent('qb-zombies:partloot')
+AddEventHandler('qb-zombies:partloot', function(listKey)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+	local PartAmount = Config.PartItemAmount
+    local item = math.random(1, #Config.ZombieParts)
+    for k,v in pairs(Config.ZombieParts) do
+        if item == k then
+            Player.Functions.AddItem(v, PartAmount)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v], 'add')
+			TriggerClientEvent("QBCore:Notify", src, 'You found '..PartAmount..'x ' .. QBCore.Shared.Items[v].label ..' ','success')
+        end
+    end
+
+end)
+
 
 entitys = {}
 
