@@ -5,7 +5,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function(xPlayer)
 	PlayerData = xPlayer
 end)
 
-	[[-- Config Zombie Models  --]]
+	--[[ Config Zombie Models ]]--
 	local Models = {
 		"u_f_m_corpse_01",
 		"u_f_y_corpse_01",
@@ -19,7 +19,7 @@ end)
 		"u_m_o_filmnoir",
 	}
   
-	[[-- Config Zombie Walk Styles  --]]		  
+	--[[ Config Zombie Walk Styles  ]]--		  
 	local walks = {
 		"move_m@drunk@verydrunk",
 		"move_m@drunk@moderatedrunk",
@@ -28,7 +28,7 @@ end)
 		"move_lester_CaneUp",
 	}
 
-	[[-- Load Players  --]]
+	--[[ Load Players  ]]--
 	players = {}
 
 		RegisterNetEvent("qb-zombies:playerupdate")
@@ -36,7 +36,7 @@ end)
 			players = mPlayers
 		end)
 
-	[[-- Load Zombies  --]]
+	--[[ Load Zombies  ]]--
 	entitys = {}
 		
 		TriggerServerEvent("RegisterNewZombie")
@@ -81,17 +81,17 @@ end)
 								end
 							end
 						until canSpawn
-						[[--Spawns Zombie --]]
+						--[[ Spawns Zombie ]]--
 						entity = CreatePed(4, GetHashKey(EntityModel), posX, posY, posZ, 0.0, true, false)
 						
-						[[--Sets Zombie Walk Style--]]
+						--[[ Sets Zombie Walk Style--]]
 						walk = walks[math.random(1, #walks)]			
 						RequestAnimSet(walk)
 						while not HasAnimSetLoaded(walk) do
 							Citizen.Wait(1)
 						end
 						
-						[[--Sets Zombie Actions --]]
+						--[[ Sets Zombie Actions ]]--
 						SetPedMaxHealth(entity, 140)
 						SetEntityHealth(entity, 140)
 						SetEntityMaxSpeed(entity, 75.0)
@@ -160,7 +160,7 @@ end)
 				end
 			end)
 
-			--Zombie sounds
+			--[[ Zombie sounds ]]--
 			Citizen.CreateThread(function()
 				while true do
 					Citizen.Wait(10000)
@@ -226,17 +226,17 @@ end)
 				end
 			end)
 
-			[[-- No Health Recharge Function --]]
+			--[[ No Health Recharge Function ]]--
 			if Config.NotHealthRecharge then
 				SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
 			end
 
-			[[-- Mute Ambience Function --]]
+			--[[ Mute Ambience Function ]]--
 			if Config.MuteAmbience then
 				StartAudioScene('CHARACTER_CHANGE_IN_SKY_SCENE')
 			end
 
-			[[-- Set Player Stats Function --]]
+			--[[ Set Player Stats Function ]]--
 			Citizen.CreateThread( function()
 				while true do
 					Citizen.Wait(0)
@@ -250,7 +250,7 @@ end)
 				end
 			end)
 
-			[[-- Zombie Loot Drop Function --]]
+			--[[ Zombie Loot Drop Function ]]--
 			if Config.ZombieDropLoot then
 				Citizen.CreateThread(function()
 					while true do
@@ -303,7 +303,7 @@ end)
 				end)
 			end
 
-			[[-- Set Safe Zone Areas Function  --]]
+			--[[ Set Safe Zone Areas Function  ]]--
 			if Config.SafeZone then
 				Citizen.CreateThread(function()
 					while true do
@@ -324,7 +324,7 @@ end)
 
 			end
 
-			[[-- Safe Zone Blip Function --]]
+			--[[ Safe Zone Blip Function ]]--
 			if Config.SafeZoneRadioBlip then
 				Citizen.CreateThread(function()
 					for k,v in pairs(Config.SafeZoneCoords) do
@@ -350,7 +350,7 @@ end)
 			end
 
 
-			[[-- Clear All Zombies Function --]]
+			--[[ Clear All Zombies Function ]]--
 			RegisterNetEvent('qb-zombies:clear')
 			AddEventHandler('qb-zombies:clear', function()
 				for i, entity in pairs(entitys) do
@@ -362,7 +362,7 @@ end)
 			end)
 
 
-			[[-- Debug Function  --]]
+			--[[ Debug Function  ]]--
 			if Config.Debug then
 				Citizen.CreateThread(function()
 					while true do
@@ -376,7 +376,7 @@ end)
 				end)
 			end
 
-			[[-- No PEDs Function --]]
+			--[[ No PEDs Function ]]--
 			if Config.NoPeds then
 				Citizen.CreateThread(function()
 					while true do
