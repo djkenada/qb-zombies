@@ -4,6 +4,8 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function(xPlayer)
 	PlayerData = xPlayer
 end)
+local Shooting = false
+local Running = false
 
 	--[[ Config Zombie Models ]]--
 	local Models = {
@@ -18,8 +20,8 @@ end)
 		"s_m_y_factory_01",
 		"u_m_o_filmnoir",
 	}
-  
-	--[[ Config Zombie Walk Styles  ]]--		  
+
+	--[[ Config Zombie Walk Styles  ]]--
 	local walks = {
 		"move_m@drunk@verydrunk",
 		"move_m@drunk@moderatedrunk",
@@ -38,10 +40,10 @@ end)
 
 	--[[ Load Zombies  ]]--
 	entitys = {}
-		
+
 		TriggerServerEvent("RegisterNewZombie")
 		TriggerServerEvent("qb-zombies:newplayer", PlayerId())
-	
+
 		RegisterNetEvent("ZombieSync")
 		AddEventHandler("ZombieSync", function()
 			AddRelationshipGroup("zombie")
@@ -50,14 +52,14 @@ end)
 				while true do
 					Citizen.Wait(1)
 					if #entitys < Config.SpawnZombie then
-						x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))				
+						x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 						EntityModel = Models[math.random(1, #Models)]
 						EntityModel = string.upper(EntityModel)
 						RequestModel(GetHashKey(EntityModel))
 						while not HasModelLoaded(GetHashKey(EntityModel)) or not HasCollisionForModelLoaded(GetHashKey(EntityModel)) do
 							Wait(1)
 						end
-						
+
 						local posX = x
 						local posY = y
 						local posZ = z + 999.0
@@ -83,27 +85,27 @@ end)
 						until canSpawn
 						--[[ Spawns Zombie ]]--
 						entity = CreatePed(4, GetHashKey(EntityModel), posX, posY, posZ, 0.0, true, false)
-						
+
 						--[[ Sets Zombie Walk Style--]]
-						walk = walks[math.random(1, #walks)]			
+						walk = walks[math.random(1, #walks)]
 						RequestAnimSet(walk)
 						while not HasAnimSetLoaded(walk) do
 							Citizen.Wait(1)
 						end
-						
+
 						--[[ Sets Zombie Actions ]]--
-						SetPedMaxHealth(entity, 140)
-						SetEntityHealth(entity, 140)
-						SetEntityMaxSpeed(entity, 75.0)
+						SetPedMaxHealth(entity, 240)
+						SetEntityHealth(entity, 240)
+						SetEntityMaxSpeed(entity, 85.0)
 						SetPedPathCanUseClimbovers(entity, true)
 						SetPedPathCanUseLadders(entity, false)
-						SetPedHearingRange(entity, 200)
+						SetPedHearingRange(entity, 500)
 						SetPedMovementClipset(entity, walk, 1.4)
 						TaskWanderStandard(entity, 1.0, 10)
 						SetCanAttackFriendly(entity, false, false)
 						SetPedCanEvasiveDive(entity, false)
 						SetPedCombatAbility(entity, 100)
-						SetPedAsEnemy(entity,false)
+						SetPedAsEnemy(entity,true)
 						SetPedAlertness(entity,3)
 						SetPedIsDrunk(entity, true)
 						SetPedConfigFlag(entity,100,1)
@@ -114,7 +116,7 @@ end)
 						SetPedRandomProps(entity)
 						StopPedSpeaking(entity, true)
 						SetEntityAsMissionEntity(entity, true, true)
-						SetAiMeleeWeaponDamageModifier(0.01)
+						SetAiMeleeWeaponDamageModifier(0.1)
 						SetPedShootRate(entity,  750)
 						SetPedCombatAttributes(entity, 46, true)
 						SetPedFleeAttributes(entity, 0, 0)
@@ -129,8 +131,8 @@ end)
 						end
 
 						table.insert(entitys, entity)
-						
-					end	
+
+					end
 
 					for i, entity in pairs(entitys) do
 						if not DoesEntityExist(entity) then
@@ -138,8 +140,8 @@ end)
 							table.remove(entitys, i)
 						else
 							local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-							local pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, true))	
-								
+							local pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, true))
+
 							if pedX < playerX - Config.DespawnDistance or pedX > playerX + Config.DespawnDistance or pedY < playerY - Config.DespawnDistance or pedY > playerY + Config.DespawnDistance then
 								local model = GetEntityModel(entity)
 								SetEntityAsNoLongerNeeded(entity)
@@ -148,7 +150,7 @@ end)
 
 							end
 						end
-							
+
 						if IsEntityInWater(entity) then
 							local model = GetEntityModel(entity)
 							SetEntityAsNoLongerNeeded(entity)
@@ -180,16 +182,73 @@ end)
 				end
 			end)
 
+
+
+function IsPlayerShooting()
+	return Shooting
+end
+
+function IsPlayerRunning()
+	return Running
+end
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+
+		if IsPedShooting(PlayerPedId()) then
+			Shooting = true
+			Citizen.Wait(1000)
+			Shooting = false
+		end
+
+		if IsPedSprinting(PlayerPedId()) or IsPedRunning(PlayerPedId()) then
+			if Running == false then
+				Running = true
+			end
+		else
+			if Running == true then
+				Running = false
+			end
+		end
+	end
+end)
 			Citizen.CreateThread(function()
 				while true do
-					Citizen.Wait(1000)
+					Citizen.Wait(5000)
 					for i, entity in pairs(entitys) do
 						for j, player in pairs(players) do
 							local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GetPlayerPed(player), true))
 							local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(player)), GetEntityCoords(entity), true)
-							
+
+							if IsPlayerShooting() then
+								DistanceTarget = 120.0
+							elseif IsPlayerRunning() then
+								DistanceTarget = 50.0
+							else
+								DistanceTarget = 20.0
+							end
 							if distance <= 5.0 then --------------------------------cange distance
 								TaskGoToEntity(entity, GetPlayerPed(player), -1, 0.0, 1.0, 1073741824, 0)
+
+								if Distance <= 1.3 then
+									if not IsPedRagdoll(Zombie) and not IsPedGettingUp(Zombie) then
+										local health = GetEntityHealth(PlayerPedId())
+										if health == 0 then
+											ClearPedTasks(Zombie)
+											TaskWanderStandard(Zombie, 10.0, 10)
+										else
+											RequestAnimSet("misscarsteal4@actor","stumble")
+											while not HasAnimSetLoaded("misscarsteal4@actor","stumble") do
+												Citizen.Wait(10)
+											end
+
+											TaskPlayAnim(Zombie, "misscarsteal4@actor","stumble", 'misscarsteal4@actor', 8.0, 1.0, -1, 48, 0.001, false, false, false)
+
+											ApplyDamageToPed(PlayerPedId(), 5, false)
+										end
+									end
+								end
 							end
 						end
 					end
@@ -213,9 +272,9 @@ end)
 										local playerPed = (GetPlayerPed(-1))
 										local maxHealth = GetEntityMaxHealth(playerPed)
 										local health = GetEntityHealth(playerPed)
-										local newHealth = health - 2 
+										local newHealth = health - 5
 										SetEntityHealth(playerPed, newHealth)
-										Wait(2000)	
+										Wait(1000)
 										TaskGoToEntity(entity, GetPlayerPed(-1), -1, 0.0, 1.0, 1073741824, 0)
 										--TaskGoStraightToCoord(entity, playerX, playerY, playerZ, 1.0, 0, 0,0)
 									end
@@ -264,7 +323,7 @@ end)
 							if IsPedDeadOrDying(entity, 1) == 1 then
 								if GetPedSourceOfDeath(entity) == PlayerPedId() then
 									playerX, playerY, playerZ = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-									pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, true))	
+									pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, true))
 									if not IsPedInAnyVehicle(PlayerPedId(), false) then
 										if(Vdist(playerX, playerY, playerZ, pedX, pedY, pedZ) < 4.0) then
 											QBCore.Functions.DrawText3D(pedX, pedY, pedZ + 0.2, 'Search Zombie - [~g~E~w~]')
@@ -277,7 +336,6 @@ end)
 													TaskPlayAnim(PlayerPedId(), "random@domestic", "pickup_low", 8.0, -8, 2000, 2, 0, 0, 0, 0)
 													Citizen.Wait(2000)
 													randomChance = math.random(1, 100)
-													TriggerServerEvent('qb-zombies:partloot')
 													if randomChance < Config.ProbabilityMoneyLoot then
 														TriggerServerEvent('qb-zombies:moneyloot')
 													elseif randomChance >= Config.ProbabilityMoneyLoot and randomChance < Config.ProbabilityItemLoot then
@@ -285,7 +343,7 @@ end)
 													elseif randomChance >= Config.ProbabilityItemLoot and randomChance < 100 then
 														QBCore.Functions.Notify('Zombie had nothing on them!','error')
 													end
-														
+
 													ClearPedSecondaryTask(GetPlayerPed(-1))
 													local model = GetEntityModel(entity)
 													SetEntityAsNoLongerNeeded(entity)
@@ -369,7 +427,7 @@ end)
 						Citizen.Wait(1)
 						for i, entity in pairs(entitys) do
 							local playerX, playerY, playerZ = table.unpack(GetEntityCoords(PlayerPedId(), true))
-							local pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, false))	
+							local pedX, pedY, pedZ = table.unpack(GetEntityCoords(entity, false))
 							DrawLine(playerX, playerY, playerZ, pedX, pedY, pedZ, 250,0,0,250)
 						end
 					end
@@ -387,12 +445,12 @@ end)
 						SetParkedVehicleDensityMultiplierThisFrame(0.0)
 						SetScenarioPedDensityMultiplierThisFrame(0.0, 0.0)
 						local playerPed = GetPlayerPed(-1)
-						local pos = GetEntityCoords(playerPed) 
+						local pos = GetEntityCoords(playerPed)
 						RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
 						SetGarbageTrucks(0)
 						SetRandomBoats(0)
 						CancelCurrentPoliceReport()
-						
+
 						for i=0,20 do
 							EnableDispatchService(i, false)
 						end
