@@ -121,6 +121,7 @@ local Running = false
 						SetPedCombatAttributes(entity, 46, true)
 						SetPedFleeAttributes(entity, 0, 0)
 						SetPedCombatRange(entity, 2)
+						SetPedMute(entity)
 						SetPedCombatMovement(entity, 46)
 						TaskCombatPed(entity, GetPlayerPed(-1), 0,16)
 						TaskLeaveVehicle(entity, vehicle, 0)
@@ -215,40 +216,22 @@ Citizen.CreateThread(function()
 end)
 			Citizen.CreateThread(function()
 				while true do
-					Citizen.Wait(5000)
+					Citizen.Wait(1000)
 					for i, entity in pairs(entitys) do
 						for j, player in pairs(players) do
 							local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GetPlayerPed(player), true))
 							local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(player)), GetEntityCoords(entity), true)
 
 							if IsPlayerShooting() then
-								DistanceTarget = 120.0
+								DistanceTarget = 100.0
 							elseif IsPlayerRunning() then
-								DistanceTarget = 50.0
+								DistanceTarget = 150.0
 							else
-								DistanceTarget = 20.0
+								DistanceTarget = 30.0
 							end
-							if distance <= 5.0 then --------------------------------cange distance
+							if distance <= 2===5.0 then --------------------------------cange distance
 								TaskGoToEntity(entity, GetPlayerPed(player), -1, 0.0, 1.0, 1073741824, 0)
 
-								if Distance <= 1.3 then
-									if not IsPedRagdoll(Zombie) and not IsPedGettingUp(Zombie) then
-										local health = GetEntityHealth(PlayerPedId())
-										if health == 0 then
-											ClearPedTasks(Zombie)
-											TaskWanderStandard(Zombie, 10.0, 10)
-										else
-											RequestAnimSet("misscarsteal4@actor","stumble")
-											while not HasAnimSetLoaded("misscarsteal4@actor","stumble") do
-												Citizen.Wait(10)
-											end
-
-											TaskPlayAnim(Zombie, "misscarsteal4@actor","stumble", 'misscarsteal4@actor', 8.0, 1.0, -1, 48, 0.001, false, false, false)
-
-											ApplyDamageToPed(PlayerPedId(), 5, false)
-										end
-									end
-								end
 							end
 						end
 					end
@@ -409,15 +392,15 @@ end)
 
 
 			--[[ Clear All Zombies Function ]]--
-			RegisterNetEvent('qb-zombies:clear')
-			AddEventHandler('qb-zombies:clear', function()
-				for i, entity in pairs(entitys) do
-					local model = GetEntityModel(entity)
-					SetEntityAsNoLongerNeeded(entity)
-					SetModelAsNoLongerNeeded(model)
-					table.remove(entitys, i)
-				end
-			end)
+RegisterNetEvent('qb-zombies:clear')
+AddEventHandler('qb-zombies:clear', function()
+	for i, entity in pairs(entitys) do
+		local model = GetEntityModel(entity)
+		SetEntityAsNoLongerNeeded(entity)
+		SetModelAsNoLongerNeeded(model)
+		table.remove(entitys, i)
+	end
+end)
 
 
 			--[[ Debug Function  ]]--
