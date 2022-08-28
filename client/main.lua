@@ -184,7 +184,7 @@ local Running = false
 			end)
 
 
-
+--added  shooting /running detection function
 function IsPlayerShooting()
 	return Shooting
 end
@@ -197,13 +197,13 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
-		if IsPedShooting(PlayerPedId()) then
+		if IsPedShooting(GetPlayerPed(player)) then
 			Shooting = true
 			Citizen.Wait(1000)
 			Shooting = false
 		end
 
-		if IsPedSprinting(PlayerPedId()) or IsPedRunning(PlayerPedId()) then
+		if IsPedSprinting(GetPlayerPed(player)) or IsPedRunning(GetPlayerPed(player)) then
 			if Running == false then
 				Running = true
 			end
@@ -214,13 +214,18 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+local PlayerCoords = GetEntityCoords(GetPlayerPed(player))
+local PedCoords = GetEntityCoords(entity)
+
+local DistanceTarget
 			Citizen.CreateThread(function()
 				while true do
 					Citizen.Wait(1000)
 					for i, entity in pairs(entitys) do
 						for j, player in pairs(players) do
 							local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GetPlayerPed(player), true))
-							local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(player)), GetEntityCoords(entity), true)
+							local Distance = #(PedCoords - PlayerCoords)
 
 							if IsPlayerShooting() then
 								DistanceTarget = 100.0
@@ -229,9 +234,8 @@ end)
 							else
 								DistanceTarget = 30.0
 							end
-							if distance <= 2===5.0 then --------------------------------cange distance
+							if Distance <= DistanceTarget then --------------------------------cange distance
 								TaskGoToEntity(entity, GetPlayerPed(player), -1, 0.0, 1.0, 1073741824, 0)
-
 							end
 						end
 					end
