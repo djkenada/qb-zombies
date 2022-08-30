@@ -1,35 +1,40 @@
 --[[ Default Config Settings ]]--
 Config = {}
-Config.Debug 				= false					-- Set to true for debuging.
+Config.Debug 				= true-- Set to true for debuging.
 Config.NoPeds 				= true					-- Set to true for no peds.
-Config.MuteAmbience 			= true					-- Set to true to mute ambience.
+Config.MuteAmbience 			= false					-- Set to true to mute ambience.
 Config.NotHealthRecharge 		= true					-- Set true to not all health auto recharge.
 
 --[[ Zombie Spawn Config Settings ]]--
-Config.SpawnZombie 			= 5					-- Number of zombies to spawn per player.
+Config.SpawnZombie 				= 50					-- Number of zombies to spawn per player.
 Config.MinSpawnDistance 		= 30 					-- Minimum distance zombies spawn from player.
-Config.MaxSpawnDistance 		= 50 					-- Max distance zombies spawn from player.
-Config.DespawnDistance 			= 60 					-- How far away the zombies spawn.
+Config.MaxSpawnDistance 		= 100 					-- Max distance zombies spawn from player.
+Config.DespawnDistance 			= 200 					-- How far away the zombies spawn.
 
 
 --[[ Zombie Loot Config Settings ]]--
 Config.ZombieDropLoot 			= true  				-- For zombies to drop loot, set to true.
 Config.RandomChance 			= math.random(1, 100)  			-- Random number for giveaway chance.
-Config.ItemAmount 			= 1 					-- Random number for the ammout of item given.
-Config.Parts 				= true  				-- For zombies to drop loot, set to true.
+Config.ItemAmount 				= math.random(1,10)				-- Random number for the ammout of item given.
+Config.Parts 					= false  				-- For zombies to drop loot, set to true.
 Config.PartItemAmount 			= math.random(1,5) 			-- Random number for the ammout of item given.
-Config.AddtionalItem 			= true	 				-- Set to true to give extra item on loot.
-Config.AddItem 				= 'firstaid' 				-- Extra item to give player.
-Config.AddItemAmount 			= 1 					-- Random number for the ammout of extra item given.
-Config.ProbabilityMoneyLoot 		= 33 					-- 33 = 30%
-Config.ProbabilityItemLoot 		= 53 					-- 53-33 = 20%
+Config.AddtionalItem 			= false	 				-- Set to true to give extra item on loot.
+Config.AddItem 					= 'ammo' 				-- Extra item to give player.
+Config.AddItemAmount 			= 10 					-- Random number for the ammout of extra item given.
+Config.ProbabilityMoneyLoot 		= 0 					-- 33 = 30%
+Config.ProbabilityItemLoot 		= 35					-- 53-33 = 20%
 
 --[[ Zombie Loot Items Config Settings ]]--
 Config.Items = {
-	[1] = "evidence_briefcase",
-	[2] = "evidence_documents",
-	[3] = "evidence_samples",
-	[4] = "evidence_usb",
+	[1] = "water_bottle",
+	[2] = "sandwich",
+	[3] = "ifaks",
+	[4] = "coffee",
+	[5] = "bandage",
+	[6] = "painkillers",
+	[7] = "pistol_ammo",
+	[8] = "smg_ammo",
+	[9] = "rifle_ammo",
 }
 
 --[[ Zombie Body Part Config Settings ]]--

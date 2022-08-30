@@ -1,9 +1,10 @@
 This is a zombie system, converted from ESX for use with QBCore.
-* Loot from zombies (Weapons, items and money)
+* Loot from zombies (x\Weapons, items and money)
 * Loot from zombies body parts (Heart, Lungs, Arms, Feet)
 * Loot from zombies Evidence of what happened. (Briefcase, Documents, Notes, Samples)
 * Loot probability
-* Follow the closest player
+* Follow the closest player or shooting /running player 
+* zombies chase cars 
 * Hordes
 * Zombie attack proximity
 * Safe Zones
