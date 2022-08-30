@@ -39,7 +39,11 @@ Config.Items = {
 
 --[[ Zombie Body Part Config Settings ]]--
 Config.ZombieParts = {
-	
+	[1] = "zombie_brain",
+	[2] = "zombie_heart",
+	[3] = "zombie_lungs",
+	[4] = "zombie_arm",
+	[5] = "zombie_foot",	
 }
 
 --[[ Zombie Safezone Config Settings ]]--
