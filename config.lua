@@ -1,14 +1,14 @@
 --[[ Default Config Settings ]]--
 Config = {}
 Config.Debug 				= true-- Set to true for debuging.
-Config.NoPeds 				= true-- Set to true for no peds.
+Config.NoPeds 				= true					-- Set to true for no peds.
 Config.MuteAmbience 			= false					-- Set to true to mute ambience.
 Config.NotHealthRecharge 		= true					-- Set true to not all health auto recharge.
 
 --[[ Zombie Spawn Config Settings ]]--
-Config.SpawnZombie 				= 200					-- Number of zombies to spawn per player.
+Config.SpawnZombie 				= 50					-- Number of zombies to spawn per player.
 Config.MinSpawnDistance 		= 30 					-- Minimum distance zombies spawn from player.
-Config.MaxSpawnDistance 		= 75 					-- Max distance zombies spawn from player.
+Config.MaxSpawnDistance 		= 100 					-- Max distance zombies spawn from player.
 Config.DespawnDistance 			= 200 					-- How far away the zombies spawn.
 
 

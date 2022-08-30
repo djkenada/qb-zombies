@@ -53,7 +53,6 @@ end)
 
 
 
-
 entitys = {}
 
 RegisterServerEvent("RegisterNewZombie")
@@ -61,8 +60,3 @@ AddEventHandler("RegisterNewZombie", function(entity)
 	TriggerClientEvent("ZombieSync", -1, entity)
 	table.insert(entitys, entity)
 end)
-
-QBCore.Commands.Add('zombieclear',"Clears Zombies ", {}, false, function(source)
-    local src = source
-    TriggerClientEvent('qb-zombies:clear', src)
-end, 'admin')
